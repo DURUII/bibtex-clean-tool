@@ -1,5 +1,6 @@
 import re
 import argparse
+import os  # Added import if not already present
 
 
 def main(bib_name, tex_name, keep_unused):
@@ -89,7 +90,8 @@ def main(bib_name, tex_name, keep_unused):
     cleaned_bib = '\n\n'.join(cleaned_bib)
 
     # Save cleaned bib file to local directory
-    with open('cleaned_' + bib_name, 'w') as f:
+    cleaned_file = 'cleaned_' + os.path.basename(bib_name)  # changed code
+    with open(cleaned_file, 'w') as f:  # changed code
         f.write(cleaned_bib)
 
 
