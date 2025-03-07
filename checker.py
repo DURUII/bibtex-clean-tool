@@ -34,15 +34,9 @@ def update_entry(original_key, original_entry):
     return updated_entry
 
 
-def batch_check(bib_name, num_entries=60):
-    """Processes the first `num_entries` in the .bib file, updates them, and writes a new file.
-
-    Args:
-        bib_name (str): The name of the .bib file.
-        num_entries (int, optional): The number of entries to check. Defaults to 60.
-
-    Returns:
-        None
+def batch_check(bib_name, num_entries=60, keep_unselected=True):  # changed code: added keep_unselected parameter
+    """Processes the first `num_entries` in the .bib file, updates them,
+       and writes a new file. Optionally keeps unselected entries.
     """
     bib_entries = parse_bib_file(bib_name)
 
@@ -53,12 +47,15 @@ def batch_check(bib_name, num_entries=60):
         updated_bib_entries[key] = update_entry(key, bib_entries[key])
         time.sleep(1)  # Avoid being rate-limited by IEEE Xplore
 
-    # Combine updated and unchanged entries
-    updated_bib = '\n\n'.join(updated_bib_entries.values()) + '\n\n' + '\n\n'.join(
-        [bib_entries[k] for k in bib_entries if k not in updated_bib_entries])
+    # Combine updated entries and add unchanged ones if keep_unselected is True
+    updated_bib = '\n\n'.join(updated_bib_entries.values())
+    if keep_unselected:
+        unchanged = [bib_entries[k] for k in bib_entries if k not in updated_bib_entries]
+        if unchanged:
+            updated_bib += '\n\n' + '\n\n'.join(unchanged)
 
-    updated_filename = 'updated_' + os.path.basename(bib_name)  # changed code
-    with open(updated_filename, 'w', encoding='utf-8') as f:  # changed code
+    updated_filename = 'updated_' + os.path.basename(bib_name)
+    with open(updated_filename, 'w', encoding='utf-8') as f:
         f.write(updated_bib)
 
     print(f"Updated BibTeX saved as {updated_filename}")
@@ -67,7 +64,8 @@ def batch_check(bib_name, num_entries=60):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Update BibTeX entries using IEEE Xplore.')
     parser.add_argument('bib_file', nargs='?', default='cleaned_ref.bib', help='The name of the bib file (default: ref.bib)')
-    parser.add_argument('--num', type=int, default=60, help='Number of entries to check (default: 80)')
+    parser.add_argument('--num', type=int, default=60, help='Number of entries to check (default: 60)')
+    parser.add_argument('--remove_unselected', action='store_true', help='Remove unselected entries')  # changed code
     args = parser.parse_args()
-
-    batch_check(args.bib_file, args.num)
+    keep_unselected = not args.remove_unselected  # changed code
+    batch_check(args.bib_file, args.num, keep_unselected)  # changed code
