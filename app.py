@@ -5,9 +5,22 @@ from cleaner import main as clean_bibtex
 import tempfile
 import os
 
-st.title("BibTeX Clean and Checker Tool")
-
-st.sidebar.title("Options")
+# st.title("BibTeX Clean and Checker Tool")
+st.sidebar.title("BibTeX Tool")
+st.sidebar.header("Options")
+# Added repository link and donation
+st.sidebar.markdown("""[🌟 GitHub Repo](https://github.com/your_repo)<div align="center">
+    <a href="https://space.bilibili.com/23442583">
+        <img src="https://img.shields.io/badge/Bilibili-00A1D6?style=for-the-badge&logo=bilibili&logoColor=white" alt="Bilibili">
+    </a>
+    <a href="https://blog.csdn.net/Raymond_Duu">
+        <img src="https://img.shields.io/badge/CSDN-FF4C00?style=for-the-badge&logo=c&logoColor=white" alt="CSDN">
+    </a>
+    <a href="https://www.cnblogs.com/anrushan">
+        <img src="https://img.shields.io/badge/Blog-FF8C00?style=for-the-badge&logo=hexo&logoColor=white" alt="Blog">
+    </a>
+</div>""", unsafe_allow_html=True)
+st.sidebar.markdown("**Donate**: ![WeChat Donate](./assets/donate.jpg)")
 option = st.sidebar.selectbox("Choose a feature", ("Clean BibTeX", "Check BibTeX"))
 
 if option == "Clean BibTeX":

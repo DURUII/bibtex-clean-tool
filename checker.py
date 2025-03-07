@@ -1,6 +1,7 @@
 import re
 import argparse
 import time
+import os  # Add if not already imported
 from utils.ieee import search_ieee, fetch_bibtex
 from utils.bib import parse_bib_file, extract_title
 from tqdm import tqdm
@@ -56,8 +57,8 @@ def batch_check(bib_name, num_entries=60):
     updated_bib = '\n\n'.join(updated_bib_entries.values()) + '\n\n' + '\n\n'.join(
         [bib_entries[k] for k in bib_entries if k not in updated_bib_entries])
 
-    updated_filename = 'updated_' + bib_name
-    with open(updated_filename, 'w', encoding='utf-8') as f:
+    updated_filename = 'updated_' + os.path.basename(bib_name)  # changed code
+    with open(updated_filename, 'w', encoding='utf-8') as f:  # changed code
         f.write(updated_bib)
 
     print(f"Updated BibTeX saved as {updated_filename}")
