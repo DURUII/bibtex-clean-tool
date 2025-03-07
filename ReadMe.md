@@ -1,14 +1,24 @@
-# Clean bib files 
+# BibTeX Cleaner & Formatter
 
-This little script deletes all unused entries in a bib file. It works as follows:
+## Clean & Reorder
 
-- Extract all citations from the tex file, by matching the inside of the latex commands \cite{} and \citA{}
-- go through bib file line by line and stop at lines starting with @ (e.g. @article)
-- check if name of citation entry appears in the citations extracted from the text file 
-- if it doesn't, discard all lines until next line starting with @
+> This is adapted from the repo [SFRL/clean_bibtex](https://github.com/SFRL/clean_bibtex)
 
-bib and tex file should be in the same directory as the python script. The script will ask to enter file names upon start.
+Manually maintaining `.bib` files is time-consuming, especially when working with long research papers with dozens or even hundreds of citations.
 
-In the command line, simply navigate to the script directory and run the script with: 
+This Python script `cleaner.py` automates the cleaning and reordering of `.bib` bibliography files based on citation usage in a corresponding LaTeX (`.tex`) document. It ensures that your bibliography entries are neatly organized, appear in the order they're cited, and are easily verifiable.
 
-    python clean_bibtex.py 
+- **Automatically organizes `.bib` entries** according to their citation order in the `.tex` file.
+- **Adds numbered reference comments** (`% reference 01`, `% reference 02`, etc.) to each entry, making it easier to cross-check with the final PDF.
+- **Removes  duplicate citations**, keeping the `.bib` file clean and concise.
+- **Preserves unreferenced entries**, appending them at the end for potential later use.
+
+
+### Usage
+
+```bash
+python script.py [-h] [bib_file] [tex_file]
+```
+
+- `bib_file` *(optional, default: ref.bib)*: Path to your `.bib` bibliography file.
+- `tex_file` *(optional, default: main.tex)*: Path to your `.tex` file containing LaTeX citations.
