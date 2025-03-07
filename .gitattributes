@@ -1,1 +1,2 @@
-*.tex linguist-language=Python
+*.tex linguist-detect=false
+*.bib linguist-detect=false
