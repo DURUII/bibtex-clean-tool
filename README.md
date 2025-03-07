@@ -1,24 +1,60 @@
-# BibTeX Cleaner & Formatter
+# Automated BibTeX Cleaner & Double-Checker
 
-## Clean & Reorder
+## Overview
 
-> This is adapted from the repo [SFRL/clean_bibtex](https://github.com/SFRL/clean_bibtex)
+This repository automates the process of cleaning, organizing, and verifying `.bib` bibliography files. It consists of two primary components:
 
-Manually maintaining `.bib` files is time-consuming, especially when working with long research papers with dozens or even hundreds of citations.
+1. **BibTeX Cleaner & Formatter (`cleaner.py`)** - Reorders `.bib` entries based on citation order in the `.tex` file, removes duplicates, and appends unused references at the end. This is adapted from the repo [SFRL/clean_bibtex](https://github.com/SFRL/clean_bibtex)
+2. **Double-Checker (`checker.py`)** - Searches IEEE Xplore for accurate BibTeX citations and updates `.bib` entries while preserving the original keys. This is necessary because sources like Google Scholar often have incorrect years, incomplete metadata, or lack authoritative information.
 
-This Python script `cleaner.py` automates the cleaning and reordering of `.bib` bibliography files based on citation usage in a corresponding LaTeX (`.tex`) document. It ensures that your bibliography entries are neatly organized, appear in the order they're cited, and are easily verifiable.
+## Features
 
-- **Automatically organizes `.bib` entries** according to their citation order in the `.tex` file.
-- **Adds numbered reference comments** (`% reference 01`, `% reference 02`, etc.) to each entry, making it easier to cross-check with the final PDF.
-- **Removes  duplicate citations**, keeping the `.bib` file clean and concise.
-- **Preserves unreferenced entries**, appending them at the end for potential later use.
+### Cleaner (`cleaner.py`)
 
+- **Reorders `.bib` entries** according to citation order in the `.tex` file.
+- **Adds reference comments** (`% reference 01`, `% reference 02`, etc.) to track ordering.
+- **Removes duplicate citations**, ensuring a concise bibliography.
+- **Preserves unused entries**, appending them at the end for later use.
 
-### Usage
+### Double-Checker (`checker.py`)
+
+- **Automatically searches IEEE Xplore** for a given BibTeX title.
+- **Fetches the latest BibTeX citation**, ensuring accurate metadata.
+- **Maintains original BibTeX keys**, replacing only outdated information.
+- **Processes a configurable number of entries** (default: 60) with a progress bar.
+
+## Installation
+
+Ensure you have Python installed, install dependencies:
 
 ```bash
-python script.py [-h] [bib_file] [tex_file]
+pip install -r requirements.txt
 ```
 
-- `bib_file` *(optional, default: ref.bib)*: Path to your `.bib` bibliography file.
-- `tex_file` *(optional, default: main.tex)*: Path to your `.tex` file containing LaTeX citations.
+You also need to install the appropriate WebDriver (e.g., ChromeDriver for Google Chrome) if using automated web scraping.
+
+## Usage
+
+### Running the Cleaner
+
+```bash
+python cleaner.py [bib_file] [tex_file]
+```
+
+- `bib_file` *(optional, default: ref.bib)*: Path to your `.bib` file.
+- `tex_file` *(optional, default: main.tex)*: Path to your `.tex` file.
+
+### Running the Double-Checker
+
+```bash
+python checker.py [bib_file] --num [number_of_entries]
+```
+
+- `bib_file` *(optional, default: cleaned_ref.bib)*: Path to your `.bib` file.
+- `--num` *(optional, default: 60)*: Number of entries to check and update.
+
+---
+
+## Contributing & Support
+
+Feel free to open issues or pull requests if you encounter any problems or have suggestions for improvement. If you find this project useful, consider giving it a ⭐ on GitHub!
