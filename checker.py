@@ -1,42 +1,21 @@
 import re
 import argparse
 import time
-from ieee_utils import search_ieee, fetch_bibtex
+from utils.ieee import search_ieee, fetch_bibtex
+from utils.bib import parse_bib_file, extract_title
 from tqdm import tqdm
 
 
-def parse_bib_file(bib_name):
-    """Parses a .bib file and returns a dictionary of entries."""
-    with open(bib_name, 'r', encoding='utf-8') as f:
-        bib = f.read()
-
-    bib_entries = {}
-    current_entry = []
-    current_key = None
-
-    for line in bib.splitlines():
-        if line.startswith('@'):
-            if current_key:
-                bib_entries[current_key] = '\n'.join(current_entry)
-            current_key = line.split('{')[1].split(',')[0]
-            current_entry = [line]
-        else:
-            current_entry.append(line)
-
-    if current_key:
-        bib_entries[current_key] = '\n'.join(current_entry)
-
-    return bib_entries
-
-
-def extract_title(entry):
-    """Extracts the title from a BibTeX entry."""
-    match = re.search(r'\btitle\s*=\s*\{(.+?)\}', entry, re.IGNORECASE)
-    return match.group(1) if match else None
-
-
 def update_entry(original_key, original_entry):
-    """Searches IEEE for the title, fetches the updated BibTeX, and keeps the original key."""
+    """Searches IEEE for the title, fetches the updated BibTeX, and keeps the original key.
+
+    Args:
+        original_key (str): The original key of the BibTeX entry.
+        original_entry (str): The original BibTeX entry.
+
+    Returns:
+        str: The updated BibTeX entry with the original key, or the original entry if no update is found.
+    """
     title = extract_title(original_entry)
     if not title:
         return original_entry  # If no title, keep the original entry
@@ -49,14 +28,23 @@ def update_entry(original_key, original_entry):
     if not bibtex:
         return original_entry  # No valid BibTeX found, keep original
 
-    # Replace the key in the new BibTeX with the original key
-    updated_entry = re.sub(r'(@\w+\{)[^,]+', f'\1{original_key}', bibtex, count=1)
+    # Replace the key in the new BibTeX
+    updated_entry = re.sub(r'(@\w+\{)[^,]+', rf'\1{original_key}', bibtex, count=1)
     return updated_entry
 
 
-def batch_check(bib_name, num_entries=80):
-    """Processes the first `num_entries` in the .bib file, updates them, and writes a new file."""
+def batch_check(bib_name, num_entries=60):
+    """Processes the first `num_entries` in the .bib file, updates them, and writes a new file.
+
+    Args:
+        bib_name (str): The name of the .bib file.
+        num_entries (int, optional): The number of entries to check. Defaults to 60.
+
+    Returns:
+        None
+    """
     bib_entries = parse_bib_file(bib_name)
+
     keys = list(bib_entries.keys())[:num_entries]
     updated_bib_entries = {}
 

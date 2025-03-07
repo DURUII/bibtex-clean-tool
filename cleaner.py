@@ -2,12 +2,13 @@ import re
 import argparse
 
 
-def main(bib_name, tex_name):
+def main(bib_name, tex_name, keep_unused):
     """Main function to clean and reorder bib entries based on citations in the tex file.
 
     Args:
         bib_name (str): The name of the bib file.
         tex_name (str): The name of the tex file.
+        keep_unused (bool): Whether to keep unused entries.
     """
     # Load bib file from local directory
     with open(bib_name, 'r') as f:
@@ -56,6 +57,8 @@ def main(bib_name, tex_name):
     current_entry = []
     current_key = None
     for line in bib:
+        if line.startswith('%'):
+            continue  # Skip comment lines
         if line.startswith('@'):
             if current_key:
                 bib_entries[current_key] = '\n'.join(current_entry)
@@ -75,11 +78,12 @@ def main(bib_name, tex_name):
             del bib_entries[citation]
             reference_count += 1
 
-    # Add remaining bib entries that were not cited
-    reference_count = 1
-    for entry in bib_entries.values():
-        cleaned_bib.append(f'% unused {reference_count}\n{entry}')
-        reference_count += 1
+    # Add remaining bib entries that were not cited if keep_unused is True
+    if keep_unused:
+        reference_count = 1
+        for entry in bib_entries.values():
+            cleaned_bib.append(f'% unused {reference_count}\n{entry}')
+            reference_count += 1
 
     # Join bib file again including line breaks
     cleaned_bib = '\n\n'.join(cleaned_bib)
@@ -93,6 +97,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Clean and reorder bib entries based on citations in the tex file.')
     parser.add_argument('bib_file', nargs='?', default='ref.bib', help='The name of the bib file (default: ref.bib)')
     parser.add_argument('tex_file', nargs='?', default='main.tex', help='The name of the tex file (default: main.tex)')
+    parser.add_argument('--keep', action='store_true', help='Keep unused entries in the cleaned bib file')
     args = parser.parse_args()
 
-    main(args.bib_file, args.tex_file)
+    main(args.bib_file, args.tex_file, args.keep)
