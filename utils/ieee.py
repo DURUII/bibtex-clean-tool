@@ -24,8 +24,8 @@ def setup_driver():
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option("useAutomationExtension", False)
 
-    # Initialize WebDriver service
-    service = Service()
+    # Use ChromeDriverManager to automatically manage driver binary
+    service = Service(ChromeDriverManager().install())
     return webdriver.Chrome(service=service, options=chrome_options)
 
 
