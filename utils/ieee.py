@@ -10,6 +10,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.core.os_manager import ChromeType
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import platform
 import random
 
@@ -72,6 +74,20 @@ def search_ieee(title):
     return None
 
 
+def dismiss_cookie_banner(driver):
+    try:
+        # Wait briefly for the cookie consent banner to appear
+        banner = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div[role='dialog'][aria-label*='Cookie']"))
+        )
+        # Attempt to click the accept button within the banner, if present
+        accept_button = banner.find_element(By.TAG_NAME, 'button')
+        driver.execute_script("arguments[0].click();", accept_button)
+        human_delay(1, 2)
+    except Exception:
+        pass  # If not found, continue
+
+
 def fetch_bibtex(ieee_url):
     """Fetches the BibTeX information of a paper from its IEEE Xplore URL.
 
@@ -85,13 +101,19 @@ def fetch_bibtex(ieee_url):
     try:
         driver.get(ieee_url)
         human_delay(1, 2)
+        # Dismiss cookie consent banner if present
+        dismiss_cookie_banner(driver)
         # Find and click the "Cite This" button
-        cite_button = driver.find_element(By.CLASS_NAME, 'xpl-btn-secondary')
-        cite_button.click()
+        cite_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'xpl-btn-secondary'))
+        )
+        driver.execute_script("arguments[0].click();", cite_button)
         human_delay(2, 3)
         # Switch to the BibTeX tab
-        bibtex_tab = driver.find_element(By.CSS_SELECTOR, 'a.document-tab-link[title="BibTeX"]')
-        bibtex_tab.click()
+        bibtex_tab = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.document-tab-link[title="BibTeX"]'))
+        )
+        driver.execute_script("arguments[0].click();", bibtex_tab)
         human_delay(2, 3)
         # Get the BibTeX text
         bibtex_text = driver.find_element(By.CSS_SELECTOR, "pre.text.ris-text").text
