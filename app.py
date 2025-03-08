@@ -5,8 +5,11 @@ from cleaner import main as clean_bibtex
 import tempfile
 import os
 
+import streamlit as st
+
 st.sidebar.subheader("BibTeX Tools")
-option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)"))
+option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)", "Donate"), index=None,
+                              placeholder="I am here.")
 
 if option == "BibTex Cleaner":
     # st.sidebar.subheader("BibTex Cleaner Options")
@@ -37,7 +40,6 @@ if option == "BibTex Cleaner":
             st.balloons()  # Raise balloons after cleaner operation completes
         else:
             st.error("Please upload both .bib and .tex files.")
-            st.markdown("(^_^)b")  # Placeholder if no operation is done
 
 elif option == "BibTeX Double Checker (Preview)":
     bib_file = st.sidebar.file_uploader("Upload your .bib file", type=["bib"])
@@ -62,6 +64,35 @@ elif option == "BibTeX Double Checker (Preview)":
             st.balloons()  # Raise balloons after checker operation completes
         else:
             st.error("Please upload a .bib file.")
-            st.markdown("(^_^)b")  # Placeholder if no operation is done
+elif option == "Donate":
+    pass
 else:
-    st.markdown("(^_^)b")  # Overall placeholder if no operation is triggered
+    st.markdown(
+        """
+    <style>
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+        #emoji {
+            font-size: 200px;
+            line-height: 1.25;
+            margin-bottom: 20px;
+        }
+        #text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: -10px;
+        }
+    </style>
+    <div class="center-container">
+        <div id="emoji">(╯°□°)╯</div>
+        <div id="text">BibTeX Woes? Say goodbye to the nightmare.</div>
+    </div>
+    """,
+        unsafe_allow_html=True
+    )
