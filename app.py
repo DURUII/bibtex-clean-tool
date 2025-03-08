@@ -7,7 +7,7 @@ import os
 
 import streamlit as st
 
-st.subheader("BibTeX Woes? Say goodbye to the nightmare.")
+st.write("BibTeX Woes? Say goodbye to the nightmare.")
 st.sidebar.subheader("BibTeX Tools")
 option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)", "Donate"))
 
