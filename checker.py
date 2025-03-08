@@ -35,17 +35,21 @@ def update_entry(original_key, original_entry):
     return updated_entry
 
 
-def batch_check(bib_name, num_entries=60, keep_unselected=True):  # changed code: added keep_unselected parameter
+def batch_check(bib_name, num_entries=60, keep_unselected=True, progress_object=None):  # changed code: added progress_object parameter
     """Processes the first `num_entries` in the .bib file, updates them,
        and writes a new file. Optionally keeps unselected entries.
+       Reports progress via the provided progress_object (e.g., st.progress).
     """
     bib_entries = parse_bib_file(bib_name)
 
     keys = list(bib_entries.keys())[:num_entries]
     updated_bib_entries = {}
+    total = len(keys)  # total entries to process
 
-    for key in tqdm(keys, desc="Updating BibTeX entries", unit="entry"):
+    for i, key in enumerate(keys):  # changed code: using index to update progress_object
         updated_bib_entries[key] = update_entry(key, bib_entries[key])
+        if progress_object:
+            progress_object.progress((i + 1) / total)  # update progress bar
         time.sleep(1)  # Avoid being rate-limited by IEEE Xplore
 
     # Combine updated entries and add unchanged ones if keep_unselected is True
