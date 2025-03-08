@@ -77,3 +77,5 @@ Feel free to open issues or pull requests if you encounter any problems or have 
 ## Additional Notes
 
 Actually, after the repo was built, I found that there are also many other repositories, like [bib-cleaner](https://bib-cleaner.readthedocs.io/en/latest/) and [bib-world](https://bib-world.com/unused), that can also remove duplicates and unused entries. I particularly like the use case of [bib-cleaner](https://bib-cleaner.readthedocs.io/en/latest/).
+
+However, our tool provides more features, such as automatic ordering of `.bib` entries according to citation sequence, IEEE Xplore verification. Hope it helps you to some extent!!! 😊
