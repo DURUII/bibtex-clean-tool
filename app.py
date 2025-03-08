@@ -1,5 +1,4 @@
 import streamlit as st
-from utils.bib import parse_bib_file
 from checker import update_entry, batch_check
 from cleaner import main as clean_bibtex
 import tempfile
