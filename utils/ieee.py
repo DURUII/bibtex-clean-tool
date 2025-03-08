@@ -11,6 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.core.os_manager import ChromeType
 import platform
+import random
 
 
 def setup_driver():
@@ -20,10 +21,12 @@ def setup_driver():
         WebDriver: A new instance of Selenium WebDriver.
     """
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
+
+    chrome_options.add_argument(
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option("useAutomationExtension", False)
 
@@ -34,6 +37,11 @@ def setup_driver():
         service = webdriver.ChromeService()
         # service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
     return webdriver.Chrome(service=service, options=chrome_options)
+
+
+def human_delay(min_delay=1, max_delay=3):
+    """Simulate human-like delays."""
+    time.sleep(random.uniform(min_delay, max_delay))
 
 
 def search_ieee(title):
@@ -51,8 +59,8 @@ def search_ieee(title):
     driver = setup_driver()
     try:
         driver.get(search_url)
-        time.sleep(2)
-        os.write(1, f"{driver.page_source.replace('\n','')}\n".encode())
+        human_delay(3, 5)
+        os.write(1, f"{driver.page_source}\n".encode())
         result = driver.find_elements(By.CLASS_NAME, 'List-results-items')
         if result:
             link = result[0].find_element(By.TAG_NAME, 'a').get_attribute('href')
@@ -75,18 +83,15 @@ def fetch_bibtex(ieee_url):
     driver = setup_driver()
     try:
         driver.get(ieee_url)
-        time.sleep(1.5)
-
+        human_delay(1, 2)
         # Find and click the "Cite This" button
         cite_button = driver.find_element(By.CLASS_NAME, 'xpl-btn-secondary')
         cite_button.click()
-        time.sleep(1.5)
-
+        human_delay(2, 3)
         # Switch to the BibTeX tab
         bibtex_tab = driver.find_element(By.CSS_SELECTOR, 'a.document-tab-link[title="BibTeX"]')
         bibtex_tab.click()
-        time.sleep(2)
-
+        human_delay(2, 3)
         # Get the BibTeX text
         bibtex_text = driver.find_element(By.CSS_SELECTOR, "pre.text.ris-text").text
         os.write(1, f"bibtex: {bibtex_text}\n".encode())
