@@ -7,7 +7,9 @@ import os
 
 import streamlit as st
 
-st.write("BibTeX Woes? Say goodbye to the nightmare.")
+if "show_welcome" not in st.session_state:
+    st.session_state["show_welcome"] = True
+
 st.sidebar.subheader("BibTeX Tools")
 option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)", "Donate"))
 
@@ -21,6 +23,7 @@ if option == "BibTex Cleaner":
     keep_unused = st.sidebar.checkbox("Keep unused entries", value=True)
 
     if st.sidebar.button("**Run BibTeX Cleaner**", type="primary", use_container_width=True):
+        st.session_state["show_welcome"] = False
         if bib_file and tex_file:
             with tempfile.NamedTemporaryFile(delete=False) as bib_temp, tempfile.NamedTemporaryFile(delete=False) as tex_temp:
                 bib_temp.write(bib_file.read())
@@ -42,6 +45,7 @@ if option == "BibTex Cleaner":
             st.error("Please upload both .bib and .tex files.")
 
 elif option == "BibTeX Double Checker (Preview)":
+    st.session_state["show_welcome"] = False
     bib_file = st.sidebar.file_uploader("Upload your .bib file", type=["bib"])
     num_entries = st.sidebar.number_input("Number of entries to check", min_value=1, max_value=100, value=2)
     remove_unselected = st.sidebar.checkbox("Remove unselected entries", value=False)
@@ -65,4 +69,73 @@ elif option == "BibTeX Double Checker (Preview)":
         else:
             st.error("Please upload a .bib file.")
 elif option == "Donate":
-    pass
+    if st.session_state["show_welcome"]:
+        st.session_state["show_welcome"] = False
+    st.markdown("## Donate")
+    st.markdown(
+        """
+        🌟 If you find this tool useful, please consider star [the github repo](https://github.com/DURUII/bibtex-clean-tool)!
+        
+        ⛽️ Scan the QR code below to support via WeChat.
+        """
+    )
+    col1, col2, col3 = st.columns([0.58, 0.02, 0.38])
+    with col1:
+        st.markdown(
+            """
+            <style>
+                .donate-text {
+                    font-family: 'Courier New', monospace;
+                    border-left: 4px solid #2ecc71;
+                    padding-left: 1rem;
+                    line-height: 2.5;
+                    margin: 1.5rem 0;
+                }
+            </style>
+
+            <div class="donate-text">
+            Your donation translates to:<br>
+            🔧 3.2x faster bug fixes<br>
+            📈 42% higher chance of new features<br>
+            😴 1 all-nighter prevented<br>
+            🥤 a cup of milk tea with 30% sugar.
+            <br>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    with col3:
+        st.image("assets/donate.jpg",
+                 width=200,
+                 caption="It sucks, but you'll get through it.")
+
+if st.session_state["show_welcome"]:
+    st.markdown(
+        """
+    <style>
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+        #emoji {
+            font-size: 150px;
+            line-height: 1.25;
+            margin-bottom: 20px;
+        }
+        #text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: -10px;
+        }
+    </style>
+    <div class="center-container">
+        <div id="emoji">(╯°□°)</div>
+        <div id="text">BibTeX Woes? Say goodbye to the nightmare.</div>
+    </div>
+    """,
+        unsafe_allow_html=True
+    )

@@ -1,8 +1,10 @@
 # Automated BibTeX Cleaner & Double-Checker
 
+> Try it online: https://bibtex-clean-tool.streamlit.app/
+
 ## Overview
 
-This repository automates the process of cleaning, organizing, and verifying `.bib` bibliography files. It consists of two primary components:
+Inspired by the cool repo [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy), this repository automates the process of cleaning, organizing, and verifying `.bib` bibliography files. It consists of two primary components:
 
 1. **BibTeX Cleaner & Formatter (`cleaner.py`)** - Reorders `.bib` entries based on citation order in the `.tex` file, removes duplicates, and appends unused references at the end. This is adapted from the repo [SFRL/clean_bibtex](https://github.com/SFRL/clean_bibtex)
 2. **Double-Checker (`checker.py`)** - Searches IEEE Xplore for accurate BibTeX citations and updates `.bib` entries while preserving the original keys. This is necessary because sources like Google Scholar often have incorrect years, incomplete metadata, or lack authoritative information.
