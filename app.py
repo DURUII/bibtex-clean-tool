@@ -7,9 +7,9 @@ import os
 
 import streamlit as st
 
+st.subheader("BibTeX Woes? Say goodbye to the nightmare.")
 st.sidebar.subheader("BibTeX Tools")
-option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)", "Donate"), index=None,
-                              placeholder="I am here.")
+option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)", "Donate"))
 
 if option == "BibTex Cleaner":
     # st.sidebar.subheader("BibTex Cleaner Options")
@@ -66,33 +66,3 @@ elif option == "BibTeX Double Checker (Preview)":
             st.error("Please upload a .bib file.")
 elif option == "Donate":
     pass
-else:
-    st.markdown(
-        """
-    <style>
-        .center-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-        }
-        #emoji {
-            font-size: 200px;
-            line-height: 1.25;
-            margin-bottom: 20px;
-        }
-        #text {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: -10px;
-        }
-    </style>
-    <div class="center-container">
-        <div id="emoji">(╯°□°)╯</div>
-        <div id="text">BibTeX Woes? Say goodbye to the nightmare.</div>
-    </div>
-    """,
-        unsafe_allow_html=True
-    )
