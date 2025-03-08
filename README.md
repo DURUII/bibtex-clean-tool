@@ -35,7 +35,13 @@ pip install -r requirements.txt
 
 You also need to install the appropriate WebDriver (e.g., ChromeDriver for Google Chrome) if using automated web scraping.
 
-## Usage
+## Local Streamlit Usage
+
+```bash
+streamlit run app.py
+```
+
+## Command-Line Usage
 
 ### Running the Cleaner
 
@@ -54,6 +60,7 @@ python checker.py [bib_file] --num [number_of_entries]
 
 - `bib_file` *(optional, default: cleaned_ref.bib)*: Path to your `.bib` file.
 - `--num` *(optional, default: 60)*: Number of entries to check and update.
+- ·--remove_unselected`: Remove unselected entries.
 
 ---
 
