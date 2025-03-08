@@ -7,26 +7,35 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.core.os_manager import ChromeType
+import streamlit as st
+
+# New: cache the driver resource to avoid reinitializing for every call
+
+
+@st.cache_resource
+def get_driver():
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+    service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+    return webdriver.Chrome(service=service, options=options)
+
+# Option 1: Replace setup_driver() with cached get_driver() usage.
 
 
 def setup_driver():
-    """Initializes Selenium WebDriver with specific options to avoid detection.
+    """Initializes (or retrieves) Selenium WebDriver using cached resource.
 
     Returns:
-        WebDriver: An instance of Selenium WebDriver.
+        WebDriver: A cached instance of Selenium WebDriver.
     """
-    # Set Chrome options to avoid detection
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless=new")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option("useAutomationExtension", False)
-
-    # Use ChromeDriverManager to automatically manage driver binary
-    service = Service(ChromeDriverManager().install())
-    return webdriver.Chrome(service=service, options=chrome_options)
+    return get_driver()
 
 
 def search_ieee(title, human_mode=False):
@@ -52,7 +61,9 @@ def search_ieee(title, human_mode=False):
             print('paper-based:', link)
             return link
     finally:
-        driver.quit()
+        # If you wish to quit the driver after each operation, you may call driver.quit()
+        # However, with a cached resource, it is generally better to reuse the session.
+        pass
     return None
 
 
@@ -85,7 +96,7 @@ def fetch_bibtex(ieee_url, human_mode=False):
         bibtex_text = driver.find_element(By.CSS_SELECTOR, "pre.text.ris-text").text
         return bibtex_text
     finally:
-        driver.quit()
+        pass  # Decide if you want to close the driver or keep it cached.
     return None
 
 
