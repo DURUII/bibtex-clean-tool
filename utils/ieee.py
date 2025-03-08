@@ -83,12 +83,16 @@ def search_ieee(title):
         driver.get(search_url)
         human_delay(3, 5)  # Allow page to load and dynamic elements to render
         # Output page source for debugging purposes
-        os.write(1, f"{driver.page_source}\n".encode())
+        os.write(1, f"{driver.page_source[:100]}\n".encode())
         # Find elements containing search results; class name may need updating if IEEE changes their layout
         result = driver.find_elements(By.CLASS_NAME, 'List-results-items')
         if result:
             # Extract the first result's link from its anchor tag
-            link = result[0].find_element(By.TAG_NAME, 'a').get_attribute('href')
+            element = result[0].find_element(By.TAG_NAME, 'a')
+            def f(x): return ("".join(re.findall(r'[A-Za-z]+', x))).lower().strip()
+            if not f(title) == f(element.text):
+                return None
+            link = element.get_attribute('href')
             os.write(1, f"paper-based: {link}\n".encode())
             return link
     finally:
@@ -156,7 +160,7 @@ def fetch_bibtex(ieee_url):
 
         # Retrieve the BibTeX text from the designated preformatted text element
         bibtex_text = driver.find_element(By.CSS_SELECTOR, "pre.text.ris-text").text
-        os.write(1, f"bibtex: {bibtex_text}\n".encode())
+        os.write(1, f"bibtex: {bibtex_text[:10]}\n".encode())
         return bibtex_text
     finally:
         driver.quit()  # Always close the driver to free resources
@@ -171,4 +175,4 @@ if __name__ == '__main__':
     if link:
         # Fetch and output the BibTeX entry from the paper page
         bibtex = fetch_bibtex(link)
-        os.write(1, f"{bibtex}\n".encode())
+        # os.write(1, f"{bibtex}\n".encode())
