@@ -14,7 +14,6 @@ import streamlit as st
 # New: cache the driver resource to avoid reinitializing for every call
 
 
-@st.cache_resource
 def get_driver():
     options = Options()
     options.add_argument("--headless=new")
