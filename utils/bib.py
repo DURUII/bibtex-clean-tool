@@ -43,5 +43,5 @@ def extract_title(entry):
     Returns:
         str: The title of the entry, or None if no title is found.
     """
-    match = re.search(r'\btitle\s*=\\s*\{(.+?)\}', entry, re.IGNORECASE)
+    match = re.search(r'\btitle\s*=\s*\{(.+?)\}', entry, re.IGNORECASE)
     return match.group(1) if match else None

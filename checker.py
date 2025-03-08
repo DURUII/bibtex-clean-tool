@@ -18,6 +18,7 @@ def update_entry(original_key, original_entry):
         str: The updated BibTeX entry with the original key, or the original entry if no update is found.
     """
     title = extract_title(original_entry)
+    print(title)
     if not title:
         return original_entry  # If no title, keep the original entry
 
@@ -30,7 +31,7 @@ def update_entry(original_key, original_entry):
         return original_entry  # No valid BibTeX found, keep original
 
     # Replace the key in the new BibTeX
-    updated_entry = re.sub(r'(@\w+\{)[^,]+', rf'\1{original_key}', bibtex, count=1)
+    updated_entry = re.sub(r'(@\w+\{)[^,]+', rf'\g<1>{original_key}', bibtex, count=1)
     return updated_entry
 
 

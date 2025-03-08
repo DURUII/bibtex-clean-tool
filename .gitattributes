@@ -1,2 +1,3 @@
 *.tex linguist-detect=false
 *.bib linguist-detect=false
+*.py linguist-detectable=true
