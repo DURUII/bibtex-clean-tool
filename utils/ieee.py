@@ -29,7 +29,7 @@ def get_driver():
     if platform.system() == "Darwin":
         service = Service()
     else:
-        service = Service(ChromeDriverManager().install())
+        service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 
     return webdriver.Chrome(service=service, options=chrome_options)
 
