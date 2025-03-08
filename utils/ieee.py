@@ -2,6 +2,7 @@ import re
 import time
 import requests
 import urllib.parse
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -46,7 +47,7 @@ def search_ieee(title):
     """
     # Construct the search URL
     search_url = f"https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText={urllib.parse.quote(title)}"
-    print('title-based:', search_url)
+    os.write(1, f"title-based: {search_url}\n".encode())
     driver = setup_driver()
     try:
         driver.get(search_url)
@@ -54,7 +55,7 @@ def search_ieee(title):
         result = driver.find_elements(By.CLASS_NAME, 'List-results-items')
         if result:
             link = result[0].find_element(By.TAG_NAME, 'a').get_attribute('href')
-            print('paper-based:', link)
+            os.write(1, f"paper-based: {link}\n".encode())
             return link
     finally:
         driver.quit()
@@ -87,7 +88,7 @@ def fetch_bibtex(ieee_url):
 
         # Get the BibTeX text
         bibtex_text = driver.find_element(By.CSS_SELECTOR, "pre.text.ris-text").text
-        print('bibtex:', bibtex_text)
+        os.write(1, f"bibtex: {bibtex_text}\n".encode())
         return bibtex_text
     finally:
         driver.quit()
@@ -99,4 +100,4 @@ if __name__ == '__main__':
     link = search_ieee(title)
     if link:
         bibtex = fetch_bibtex(link)
-        print(bibtex)
+        os.write(1, f"{bibtex}\n".encode())
