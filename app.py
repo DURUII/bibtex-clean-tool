@@ -109,7 +109,7 @@ elif option == "Donate":
         )
     with col3:
         st.image("assets/donate.jpg",
-                 width=200,
+                 width=800,
                  caption="It sucks, but you'll get through it.")
 
 if st.session_state["show_welcome"]:
