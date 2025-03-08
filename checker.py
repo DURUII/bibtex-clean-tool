@@ -22,11 +22,11 @@ def update_entry(original_key, original_entry):
     if not title:
         return original_entry  # If no title, keep the original entry
 
-    link = search_ieee(title, human_mode=False)
+    link = search_ieee(title)
     if not link:
         return original_entry  # No valid link found, keep original
 
-    bibtex = fetch_bibtex(link, human_mode=False)
+    bibtex = fetch_bibtex(link)
     if not bibtex:
         return original_entry  # No valid BibTeX found, keep original
 

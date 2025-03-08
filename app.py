@@ -4,17 +4,20 @@ from checker import update_entry, batch_check
 from cleaner import main as clean_bibtex
 import tempfile
 import os
-
-import streamlit as st
+import platform
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 
 if "show_welcome" not in st.session_state:
     st.session_state["show_welcome"] = True
 
 st.sidebar.subheader("BibTeX Tools")
-option = st.sidebar.selectbox("Choose a tool", ("BibTex Cleaner", "BibTeX Double Checker (Preview)", "Donate"))
+option = st.sidebar.selectbox("Choose a tool", ("BibTeX Cleaner", "BibTeX Double Checker (Preview)", "Donate"))
 
-if option == "BibTex Cleaner":
-    # st.sidebar.subheader("BibTex Cleaner Options")
+if option == "BibTeX Cleaner":
     cols = st.sidebar.columns(2)  # Two columns for file uploads
     with cols[0]:
         bib_file = st.file_uploader("Upload your .bib file", type=["bib"])
@@ -50,14 +53,15 @@ elif option == "BibTeX Double Checker (Preview)":
     num_entries = st.sidebar.number_input("Number of entries to check", min_value=1, max_value=100, value=2)
     remove_unselected = st.sidebar.checkbox("Remove unselected entries", value=False)
 
-    if st.sidebar.button("**Run Check BibTeX**", type="primary", use_container_width=True):
+    if st.sidebar.button("**Run BibTeX Checker**", type="primary", use_container_width=True):
         if bib_file:
-            progress_bar = st.progress(0, text="Operation in progress. Please wait.")  # created progress bar
+            progress_bar = st.progress(0, text="It takes time. Please wait or try local deployment.")  # created progress bar
             with tempfile.NamedTemporaryFile(delete=False) as bib_temp:
                 bib_temp.write(bib_file.read())
                 bib_temp.close()
                 updated_bib_path = 'updated_' + os.path.basename(bib_temp.name)
-                batch_check(bib_temp.name, num_entries, keep_unselected=not remove_unselected, progress_object=progress_bar)  # pass progress object
+                batch_check(bib_temp.name, num_entries, keep_unselected=not remove_unselected,
+                            progress_object=progress_bar)  # pass progress object
                 with open(updated_bib_path, 'r') as f:
                     updated_bib = f.read()
                 st.text_area("Updated BibTeX", updated_bib, height=400)
@@ -74,7 +78,7 @@ elif option == "Donate":
     st.markdown("## Donate")
     st.markdown(
         """
-        🌟 If you find this tool useful, please consider star [the github repo](https://github.com/DURUII/bibtex-clean-tool)!
+        🌟 If you find this tool useful, please consider star [the GitHub repo](https://github.com/DURUII/bibtex-clean-tool)!
         
         ⛽️ Scan the QR code below to support via WeChat.
         """
@@ -122,13 +126,12 @@ if st.session_state["show_welcome"]:
             width: 100%;
         }
         #emoji {
-            font-size: 150px;
+            font-size: 125px;
             line-height: 1.25;
             margin-bottom: 20px;
         }
         #text {
             font-size: 24px;
-            font-weight: bold;
             margin-top: -10px;
         }
     </style>

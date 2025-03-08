@@ -6,7 +6,7 @@
 
 Inspired by the cool repos [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) and [arxiv-latex-cleaner](https://github.com/google-research/arxiv-latex-cleaner), this repository automates the process of cleaning, organizing, and verifying `.bib` bibliography files. It consists of two primary components:
 
-1. **BibTeX Cleaner & Formatter (`cleaner.py`)** - Reorders `.bib` entries based on citation order in the `.tex` file, removes duplicates, and appends unused references at the end. This is adapted from the repo [SFRL/clean_bibtex](https://github.com/SFRL/clean_bibtex)
+1. **BibTeX Cleaner & Formatter (`cleaner.py`)** - Reorders `.bib` entries based on citation order in the `.tex` file, removes duplicates, and appends unused references at the end. This is adapted from the repo [SFRL/clean_bibtex](https://github.com/SFRL/clean_bibtex).
 2. **Double-Checker (`checker.py`)** - Searches IEEE Xplore for accurate BibTeX citations and updates `.bib` entries while preserving the original keys. This is necessary because sources like Google Scholar often have incorrect years, incomplete metadata, or lack authoritative information.
 
 ## Features
@@ -27,7 +27,7 @@ Inspired by the cool repos [bibtex-tidy](https://github.com/FlamingTempura/bibte
 
 ## Installation
 
-Ensure you have Python installed, install dependencies:
+Ensure you have Python installed, then install dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -60,10 +60,12 @@ python checker.py [bib_file] --num [number_of_entries]
 
 - `bib_file` *(optional, default: cleaned_ref.bib)*: Path to your `.bib` file.
 - `--num` *(optional, default: 60)*: Number of entries to check and update.
-- ·--remove_unselected`: Remove unselected entries.
+- `--remove_unselected`: Remove unselected entries.
 
 ---
 
 ## Contributing & Support
+
+> Developed and tested on Apple M1, macOS Sonoma 14.7.3.
 
 Feel free to open issues or pull requests if you encounter any problems or have suggestions for improvement. If you find this project useful, consider giving it a ⭐ on GitHub!
