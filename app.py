@@ -133,7 +133,7 @@ if st.session_state["show_welcome"]:
         }
     </style>
     <div class="center-container">
-        <div id="emoji">(╯°□°)</div>
+        <div id="emoji">(°□°)</div>
         <div id="text">BibTeX Woes? Say goodbye to the nightmare.</div>
     </div>
     """,
