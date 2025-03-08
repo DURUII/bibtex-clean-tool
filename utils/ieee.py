@@ -52,6 +52,7 @@ def search_ieee(title):
     try:
         driver.get(search_url)
         time.sleep(2)
+        os.write(1, f"{driver.page_source[:100]}".encode())
         result = driver.find_elements(By.CLASS_NAME, 'List-results-items')
         if result:
             link = result[0].find_element(By.TAG_NAME, 'a').get_attribute('href')
