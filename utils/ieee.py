@@ -51,7 +51,7 @@ def search_ieee(title):
     driver = setup_driver()
     try:
         driver.get(search_url)
-        driver.implicitly_wait(2)
+        time.sleep(2)
         result = driver.find_elements(By.CLASS_NAME, 'List-results-items')
         if result:
             link = result[0].find_element(By.TAG_NAME, 'a').get_attribute('href')
