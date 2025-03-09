@@ -2,6 +2,8 @@
 
 > Try it online: https://bibtex-clean-tool.streamlit.app/
 
+> Demo Video: https://www.bilibili.com/video/BV1XcRvYhE27
+
 ## Overview
 
 Inspired by the cool repos [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) and [arxiv-latex-cleaner](https://github.com/google-research/arxiv-latex-cleaner), this repository automates the process of cleaning, organizing, and verifying `.bib` bibliography files. 
@@ -48,21 +50,21 @@ streamlit run app.py
 ### Running the Cleaner
 
 ```bash
-python cleaner.py [bib_file] [tex_file]
+python cleaner.py [bib_file] [tex_file] [--keep] [--wrap-text]
 ```
-
 - `bib_file` *(optional, default: ref.bib)*: Path to your `.bib` file.
 - `tex_file` *(optional, default: main.tex)*: Path to your `.tex` file.
+- `--keep`: Preserve unused entries in the cleaned bibliography.
+- `--wrap-text`: Wrap the first word in the title field with \text{} for proper LaTeX formatting.
 
 ### Running the Double-Checker
 
 ```bash
-python checker.py [bib_file] --num [number_of_entries]
+python checker.py [bib_file] [--num <number_of_entries>] [--remove_unselected]
 ```
-
 - `bib_file` *(optional, default: cleaned_ref.bib)*: Path to your `.bib` file.
-- `--num` *(optional, default: 60)*: Number of entries to check and update.
-- `--remove_unselected`: Remove unselected entries.
+- `--num` *(optional, default: 60)*: Number of bibliography entries to check and update.
+- `--remove_unselected`: Remove entries that were not selected during the checking process.
 
 ---
 
