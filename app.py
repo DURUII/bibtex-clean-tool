@@ -121,17 +121,24 @@ if st.session_state["show_welcome"]:
     st.markdown(
         f"""
         <style>
+            html, body {{
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden; /* hides horizontal scroll */
+            }}
             .center-container {{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                height: 100%;
-                width: 100%;
+                margin: 0 auto; /* centers container */
+                min-height:60vh;
+                width: 80%; /* fluid width, tweak as needed */
+                box-sizing: border-box;
             }}
             /* Nodding animation */
             #emoji {{
-                font-size: 125px;
+                font-size: 120px;
                 line-height: 1.25;
                 margin-bottom: 20px;
                 animation: nodding 2s infinite;
@@ -140,7 +147,16 @@ if st.session_state["show_welcome"]:
                 0%, 100% {{ transform: translateY(0); }}
                 50% {{ transform: translateY(10px); }}
             }}
-            /* Typing animation (auto-calculated steps) */
+            /* Responsive adjustments */
+            @media (max-width: 600px) {{
+                #emoji {{
+                    font-size: 80px;
+                }}
+                #text {{
+                    font-size: 18px;
+                }}
+            }}
+            /* Typing animation */
             #text {{
                 font-size: 24px;
                 margin-top: -10px;
@@ -148,7 +164,8 @@ if st.session_state["show_welcome"]:
                 white-space: nowrap;
                 border-right: .15em solid orange;
                 width: 0ch;
-                animation: typing 3s steps({text_length}, end) forwards, blink-caret 0.75s step-end infinite;
+                animation: typing 3s steps({text_length}, end) forwards,
+                           blink-caret 0.75s step-end infinite;
             }}
             @keyframes typing {{
                 from {{ width: 0ch; }}
