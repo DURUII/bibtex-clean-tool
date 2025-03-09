@@ -28,7 +28,7 @@ if option == "BibTeX Cleaner":
     wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=True)
 
     if st.sidebar.button("**Run BibTeX Cleaner**", type="primary", use_container_width=True):
-        st.session_state["show_welcome"] = False
+        st.session_state["show_welcome"] = False  # update here only on button click
         if bib_file and tex_file:
             with tempfile.NamedTemporaryFile(delete=False) as bib_temp, tempfile.NamedTemporaryFile(delete=False) as tex_temp:
                 bib_temp.write(bib_file.read())
@@ -50,12 +50,12 @@ if option == "BibTeX Cleaner":
             st.error("Please upload both .bib and .tex files.")
 
 elif option == "BibTeX Double Checker (Preview)":
-    st.session_state["show_welcome"] = False
     bib_file = st.sidebar.file_uploader("Upload your .bib file", type=["bib"])
     num_entries = st.sidebar.number_input("Number of entries to check", min_value=1, max_value=100, value=2)
     remove_unselected = st.sidebar.checkbox("Remove unselected entries", value=False)
 
     if st.sidebar.button("**Run BibTeX Checker**", type="primary", use_container_width=True):
+        st.session_state["show_welcome"] = False  # update here on button click
         if bib_file:
             progress_bar = st.progress(0, text="It takes time. Please wait or try local deployment.")  # created progress bar
             with tempfile.NamedTemporaryFile(delete=False) as bib_temp:
@@ -75,8 +75,6 @@ elif option == "BibTeX Double Checker (Preview)":
         else:
             st.error("Please upload a .bib file.")
 elif option == "Donate":
-    if st.session_state["show_welcome"]:
-        st.session_state["show_welcome"] = False
     st.markdown("## Donate")
     st.markdown(
         """
@@ -121,25 +119,19 @@ if st.session_state["show_welcome"]:
     st.markdown(
         f"""
         <style>
-            html, body {{
-                margin: 0;
-                padding: 0;
-                overflow-x: hidden; /* hides horizontal scroll */
-            }}
             .center-container {{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto; /* centers container */
-                min-height:60vh;
-                width: 80%; /* fluid width, tweak as needed */
+                min-height: 60vh;
+                width: 80%;
+                margin: 0 auto;
                 box-sizing: border-box;
+                padding: 20px;
             }}
-            /* Nodding animation */
             #emoji {{
                 font-size: 120px;
-                line-height: 1.25;
                 margin-bottom: 20px;
                 animation: nodding 2s infinite;
             }}
@@ -147,33 +139,32 @@ if st.session_state["show_welcome"]:
                 0%, 100% {{ transform: translateY(0); }}
                 50% {{ transform: translateY(10px); }}
             }}
-            /* Responsive adjustments */
-            @media (max-width: 600px) {{
-                #emoji {{
-                    font-size: 80px;
-                }}
-                #text {{
-                    font-size: 18px;
-                }}
-            }}
-            /* Typing animation */
+            /* Typewriter effect first, then wrap */
             #text {{
                 font-size: 24px;
                 margin-top: -10px;
                 overflow: hidden;
-                white-space: nowrap;
+                white-space: nowrap; /* phase 1: single line */
                 border-right: .15em solid orange;
                 width: 0ch;
                 animation: typing 3s steps({text_length}, end) forwards,
                            blink-caret 0.75s step-end infinite;
             }}
             @keyframes typing {{
-                from {{ width: 0ch; }}
-                to {{ width: {text_length}ch; }}
+                0%   {{ width: 0ch; }}
+                99%  {{ width: {text_length}ch; }}
+                100% {{
+                    width: auto;
+                    white-space: normal; /* phase 2: allow wrapping */
+                }}
             }}
             @keyframes blink-caret {{
                 0%, 100% {{ border-color: transparent; }}
-                50% {{ border-color: orange; }}
+                50%      {{ border-color: orange; }}
+            }}
+            @media (max-width: 600px) {{
+                #emoji {{ font-size: 80px; }}
+                #text  {{ font-size: 18px; }}
             }}
         </style>
         <div class="center-container">
