@@ -2,14 +2,24 @@ import re
 import argparse
 import os  # Added import if not already present
 
+# New helper function to wrap the first word in the title field
 
-def main(bib_name, tex_name, keep_unused):
+
+def wrap_first_word_in_title(entry):
+    # Feature Description:
+    # This function modifies a BibTeX entry by adding \text{} around the first word in the title field to ensure proper formatting in LaTeX-rendered citations.
+    pattern = r'(title\s*=\s*{)(\S+)'
+    return re.sub(pattern, r'\1\\text{\2}', entry, count=1)
+
+
+def main(bib_name, tex_name, keep_unused, wrap_text=False):
     """Main function to clean and reorder bib entries based on citations in the tex file.
 
     Args:
         bib_name (str): The name of the bib file.
         tex_name (str): The name of the tex file.
         keep_unused (bool): Whether to keep unused entries.
+        wrap_text (bool, optional): If True, wraps the first word in the title field with \text{}.
     """
     # Load bib file from local directory
     with open(bib_name, 'r') as f:
@@ -75,7 +85,10 @@ def main(bib_name, tex_name, keep_unused):
     reference_count = 1
     for citation in citations:
         if citation in bib_entries:
-            cleaned_bib.append(f'% reference {reference_count}\n{bib_entries[citation]}')
+            entry = bib_entries[citation]
+            if wrap_text:
+                entry = wrap_first_word_in_title(entry)
+            cleaned_bib.append(f'% reference {reference_count}\n' + entry)
             del bib_entries[citation]
             reference_count += 1
 
@@ -83,7 +96,9 @@ def main(bib_name, tex_name, keep_unused):
     if keep_unused:
         reference_count = 1
         for entry in bib_entries.values():
-            cleaned_bib.append(f'% unused {reference_count}\n{entry}')
+            if wrap_text:
+                entry = wrap_first_word_in_title(entry)
+            cleaned_bib.append(f'% unused {reference_count}\n' + entry)
             reference_count += 1
 
     # Join bib file again including line breaks
@@ -100,6 +115,10 @@ if __name__ == '__main__':
     parser.add_argument('bib_file', nargs='?', default='ref.bib', help='The name of the bib file (default: ref.bib)')
     parser.add_argument('tex_file', nargs='?', default='main.tex', help='The name of the tex file (default: main.tex)')
     parser.add_argument('--keep', action='store_true', help='Keep unused entries in the cleaned bib file')
+    # Change --wrap-text to a boolean flag (store_true)
+    parser.add_argument(
+        '--wrap-text', action='store_true',
+        help="Wrap the first word in the title field with \\text{} for proper LaTeX formatting.")
     args = parser.parse_args()
 
-    main(args.bib_file, args.tex_file, args.keep)
+    main(args.bib_file, args.tex_file, args.keep, args.wrap_text)

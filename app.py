@@ -24,6 +24,8 @@ if option == "BibTeX Cleaner":
     with cols[1]:
         tex_file = st.file_uploader("Upload your .tex file", type=["tex"])
     keep_unused = st.sidebar.checkbox("Keep unused entries", value=True)
+    # Added checkbox for wrap_text with default True
+    wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=True)
 
     if st.sidebar.button("**Run BibTeX Cleaner**", type="primary", use_container_width=True):
         st.session_state["show_welcome"] = False
@@ -34,7 +36,7 @@ if option == "BibTeX Cleaner":
                 bib_temp.close()
                 tex_temp.close()
                 cleaned_bib_path = 'cleaned_' + os.path.basename(bib_temp.name)
-                clean_bibtex(bib_temp.name, tex_temp.name, keep_unused)
+                clean_bibtex(bib_temp.name, tex_temp.name, keep_unused, wrap_text)  # pass new parameter
                 with open(cleaned_bib_path, 'r') as f:
                     cleaned_bib = f.read()
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
