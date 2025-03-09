@@ -114,32 +114,55 @@ elif option == "Donate":
         st.image("assets/donate.jpg",
                  caption="It sucks, but you'll get through it.")
 
+my_text = "BibTeX Woes? Say goodbye to the nightmare."
+text_length = len(my_text) - 3
+
 if st.session_state["show_welcome"]:
     st.markdown(
-        """
-    <style>
-        .center-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-        }
-        #emoji {
-            font-size: 125px;
-            line-height: 1.25;
-            margin-bottom: 20px;
-        }
-        #text {
-            font-size: 24px;
-            margin-top: -10px;
-        }
-    </style>
-    <div class="center-container">
-        <div id="emoji">(°□°)</div>
-        <div id="text">BibTeX Woes? Say goodbye to the nightmare.</div>
-    </div>
-    """,
+        f"""
+        <style>
+            .center-container {{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+            }}
+            /* Nodding animation */
+            #emoji {{
+                font-size: 125px;
+                line-height: 1.25;
+                margin-bottom: 20px;
+                animation: nodding 2s infinite;
+            }}
+            @keyframes nodding {{
+                0%, 100% {{ transform: translateY(0); }}
+                50% {{ transform: translateY(10px); }}
+            }}
+            /* Typing animation (auto-calculated steps) */
+            #text {{
+                font-size: 24px;
+                margin-top: -10px;
+                overflow: hidden;
+                white-space: nowrap;
+                border-right: .15em solid orange;
+                width: 0ch;
+                animation: typing 3s steps({text_length}, end) forwards, blink-caret 0.75s step-end infinite;
+            }}
+            @keyframes typing {{
+                from {{ width: 0ch; }}
+                to {{ width: {text_length}ch; }}
+            }}
+            @keyframes blink-caret {{
+                0%, 100% {{ border-color: transparent; }}
+                50% {{ border-color: orange; }}
+            }}
+        </style>
+        <div class="center-container">
+            <div id="emoji">(°□°)</div>
+            <div id="text">{my_text}</div>
+        </div>
+        """,
         unsafe_allow_html=True
     )
