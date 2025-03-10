@@ -4,6 +4,9 @@
 
 > Demo Video: https://www.bilibili.com/video/BV1XcRvYhE27
 
+
+![poster-chinese](assets/poster-horizontal.png)
+
 ## Overview
 
 Inspired by the cool repos [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) and [arxiv-latex-cleaner](https://github.com/google-research/arxiv-latex-cleaner), this repository automates the process of cleaning, organizing, and verifying `.bib` bibliography files. 
