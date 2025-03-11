@@ -14,7 +14,7 @@ if "show_welcome" not in st.session_state:
     st.session_state["show_welcome"] = True
 
 st.sidebar.subheader("BibTeX Tools")
-st.sidebar.caption("⚠️ Any program can make mistakes. Check important info.")
+st.sidebar.caption("⚠️ No data stored! Check important info.")
 option = st.sidebar.selectbox("Choose a tool", ("BibTeX Cleaner", "BibTeX Double Checker (Preview)", "Donate"))
 
 if option == "BibTeX Cleaner":
