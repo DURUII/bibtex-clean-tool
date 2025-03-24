@@ -43,9 +43,13 @@ if option == "BibTeX Cleaner":
                 cleaned_tex_path = 'cleaned_' + os.path.basename(tex_temp.name)
 
                 clean_bibtex(bib_temp.name, tex_temp.name, keep_unused, wrap_text, remove_review_textcolor)  # pass new parameter
+                
                 with open(cleaned_bib_path, 'r') as f:
                     cleaned_bib = f.read()
-                    
+
+                with open(cleaned_tex_path, 'r') as f:
+                    cleaned_tex = f.read()
+
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
                 st.download_button("Download Cleaned BibTeX", cleaned_bib,
                                    file_name=cleaned_bib_path, mime="text/plain")
