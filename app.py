@@ -28,7 +28,7 @@ if option == "BibTeX Cleaner":
     # Added checkbox for wrap_text with default True
     wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=False)
     # New checkbox for removing textcolor commands
-    remove_review_textcolor = st.sidebar.checkbox("Remove textcolor commands", value=False)
+    remove_review_textcolor = st.sidebar.checkbox("Remove textcolor{red} commands", value=False)
 
     if st.sidebar.button("**Run BibTeX Cleaner**", type="primary", use_container_width=True):
         st.session_state["show_welcome"] = False  # update here only on button click
@@ -48,9 +48,8 @@ if option == "BibTeX Cleaner":
                 with open(cleaned_bib_path, 'r') as f:
                     cleaned_bib = f.read()
 
-                if remove_review_textcolor:
-                    with open(cleaned_tex_path, 'r') as f:
-                        cleaned_tex = f.read()
+                with open(cleaned_tex_path, 'r') as f:
+                    cleaned_tex = f.read()
 
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
                 
@@ -59,9 +58,9 @@ if option == "BibTeX Cleaner":
                     st.download_button("Download Cleaned BibTeX", cleaned_bib,
                                        file_name=cleaned_bib_path, mime="text/plain", use_container_width=True)
                 with cols_download[1]:
-                    if remove_review_textcolor:
-                        st.download_button("Download Cleaned TeX", cleaned_tex,
-                                        file_name=cleaned_tex_path, mime="text/plain", use_container_width=True)
+                    st.download_button("Download Cleaned TeX", cleaned_tex,
+                                        file_name=cleaned_tex_path, mime="text/plain", use_container_width=True, disabled=not remove_review_textcolor)
+
 
                 os.remove(bib_temp.name)
                 os.remove(tex_temp.name)

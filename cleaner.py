@@ -114,6 +114,12 @@ def main(bib_name, tex_name, keep_unused, wrap_text=False, remove_review_textcol
         final_tex = 'cleaned_' + os.path.basename(tex_name)
         remove_textcolor(cleaned_file, final_bib)  # Update the cleaned bib file
         remove_textcolor(tex_name, final_tex)      # Update the tex file
+    else:
+        final_tex = 'cleaned_' + os.path.basename(tex_name)
+        with open(tex_name, 'r', encoding='utf-8') as f:
+            content = f.read()
+        with open(final_tex, 'w', encoding='utf-8') as f:
+            f.write(content)
 
 
 if __name__ == '__main__':
