@@ -38,25 +38,24 @@ if option == "BibTeX Cleaner":
                 tex_temp.write(tex_file.read())
                 bib_temp.close()
                 tex_temp.close()
+
                 cleaned_bib_path = 'cleaned_' + os.path.basename(bib_temp.name)
+                cleaned_tex_path = 'cleaned_' + os.path.basename(tex_temp.name)
+
                 clean_bibtex(bib_temp.name, tex_temp.name, keep_unused, wrap_text, remove_review_textcolor)  # pass new parameter
                 with open(cleaned_bib_path, 'r') as f:
                     cleaned_bib = f.read()
+                    
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
                 st.download_button("Download Cleaned BibTeX", cleaned_bib,
                                    file_name=cleaned_bib_path, mime="text/plain")
-                # If textcolor commands were removed, load and offer the cleaned .tex file
-                if remove_review_textcolor:
-                    cleaned_tex_path = 'cleaned_' + os.path.basename(tex_temp.name)
-                    with open(cleaned_tex_path, 'r') as f:
-                        cleaned_tex = f.read()
-                    st.text_area("Cleaned TeX", cleaned_tex, height=400)
-                    st.download_button("Download Cleaned TeX", cleaned_tex,
+                st.download_button("Download Cleaned TeX", cleaned_tex,
                                        file_name=cleaned_tex_path, mime="text/plain")
-                    os.remove(cleaned_tex_path)
+
                 os.remove(bib_temp.name)
                 os.remove(tex_temp.name)
                 os.remove(cleaned_bib_path)
+                os.remove(cleaned_tex_path)
             st.balloons()  # Raise balloons after cleaner operation completes
         else:
             st.error("Please upload both .bib and .tex files.")
