@@ -48,8 +48,9 @@ if option == "BibTeX Cleaner":
                 with open(cleaned_bib_path, 'r') as f:
                     cleaned_bib = f.read()
 
-                with open(cleaned_tex_path, 'r') as f:
-                    cleaned_tex = f.read()
+                if remove_review_textcolor:
+                    with open(cleaned_tex_path, 'r') as f:
+                        cleaned_tex = f.read()
 
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
                 
