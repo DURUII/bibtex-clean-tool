@@ -109,10 +109,11 @@ def main(bib_name, tex_name, keep_unused, wrap_text=False, remove_review_textcol
     with open(cleaned_file, 'w') as f:  # changed code
         f.write(cleaned_bib)
     
-    # New change: Process tex file if remove_review_textcolor flag is set
     if remove_review_textcolor:
-        cleaned_tex = 'cleaned_' + os.path.basename(tex_name)
-        remove_textcolor(tex_name, cleaned_tex)  # call helper from utils/textcolor
+        final_bib = 'final_' + os.path.basename(bib_name)
+        final_tex = 'final_' + os.path.basename(tex_name)
+        remove_textcolor(cleaned_file, final_bib)  # Update the cleaned bib file
+        remove_textcolor(tex_name, final_tex)      # Update the tex file
 
 
 if __name__ == '__main__':
