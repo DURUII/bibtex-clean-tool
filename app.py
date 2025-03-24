@@ -58,8 +58,9 @@ if option == "BibTeX Cleaner":
                     st.download_button("Download Cleaned BibTeX", cleaned_bib,
                                        file_name=cleaned_bib_path, mime="text/plain", use_container_width=True)
                 with cols_download[1]:
-                    st.download_button("Download Cleaned TeX", cleaned_tex,
-                                       file_name=cleaned_tex_path, mime="text/plain", use_container_width=True)
+                    if remove_review_textcolor:
+                        st.download_button("Download Cleaned TeX", cleaned_tex,
+                                        file_name=cleaned_tex_path, mime="text/plain", use_container_width=True)
 
                 os.remove(bib_temp.name)
                 os.remove(tex_temp.name)
