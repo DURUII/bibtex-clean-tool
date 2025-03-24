@@ -1,10 +1,9 @@
 import re
 import argparse
 import os  # Added import if not already present
+from utils.textcolor import remove_textcolor  # modified import
 
 # New helper function to wrap the first word in the title field
-
-
 def wrap_first_word_in_title(entry):
     # Feature Description:
     # This function modifies a BibTeX entry by adding \text{} around the first word in the title field to ensure proper formatting in LaTeX-rendered citations.
@@ -12,7 +11,7 @@ def wrap_first_word_in_title(entry):
     return re.sub(pattern, r'\1\\text{\2}', entry, count=1)
 
 
-def main(bib_name, tex_name, keep_unused, wrap_text=False):
+def main(bib_name, tex_name, keep_unused, wrap_text=False, remove_review_textcolor=False):  # modified signature
     """Main function to clean and reorder bib entries based on citations in the tex file.
 
     Args:
@@ -20,6 +19,7 @@ def main(bib_name, tex_name, keep_unused, wrap_text=False):
         tex_name (str): The name of the tex file.
         keep_unused (bool): Whether to keep unused entries.
         wrap_text (bool, optional): If True, wraps the first word in the title field with \text{}.
+        remove_review_textcolor (bool, optional): If True, removes textcolor commands from the tex file.
     """
     # Load bib file from local directory
     with open(bib_name, 'r') as f:
@@ -108,6 +108,11 @@ def main(bib_name, tex_name, keep_unused, wrap_text=False):
     cleaned_file = 'cleaned_' + os.path.basename(bib_name)  # changed code
     with open(cleaned_file, 'w') as f:  # changed code
         f.write(cleaned_bib)
+    
+    # New change: Process tex file if remove_review_textcolor flag is set
+    if remove_review_textcolor:
+        cleaned_tex = 'cleaned_' + os.path.basename(tex_name)
+        remove_textcolor(tex_name, cleaned_tex)  # call helper from utils/textcolor
 
 
 if __name__ == '__main__':
@@ -115,10 +120,10 @@ if __name__ == '__main__':
     parser.add_argument('bib_file', nargs='?', default='ref.bib', help='The name of the bib file (default: ref.bib)')
     parser.add_argument('tex_file', nargs='?', default='main.tex', help='The name of the tex file (default: main.tex)')
     parser.add_argument('--keep', action='store_true', help='Keep unused entries in the cleaned bib file')
-    # Change --wrap-text to a boolean flag (store_true)
-    parser.add_argument(
-        '--wrap-text', action='store_true',
-        help="Wrap the first word in the title field with \\text{} for proper LaTeX formatting.")
+    parser.add_argument('--wrap-text', action='store_true', help="Wrap the first word in the title field with \\text{} for proper LaTeX formatting.")
+    # New argument:
+    parser.add_argument('--remove-review-textcolor', action='store_true', help='Remove textcolor commands from the tex file')
+    
     args = parser.parse_args()
 
-    main(args.bib_file, args.tex_file, args.keep, args.wrap_text)
+    main(args.bib_file, args.tex_file, args.keep, args.wrap_text, args.remove_review_textcolor)

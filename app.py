@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
+import argparse
 
 if "show_welcome" not in st.session_state:
     st.session_state["show_welcome"] = True
@@ -26,6 +27,8 @@ if option == "BibTeX Cleaner":
     keep_unused = st.sidebar.checkbox("Keep unused entries", value=True)
     # Added checkbox for wrap_text with default True
     wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=True)
+    # New checkbox for removing textcolor commands
+    remove_review_textcolor = st.sidebar.checkbox("Remove textcolor commands", value=False)
 
     if st.sidebar.button("**Run BibTeX Cleaner**", type="primary", use_container_width=True):
         st.session_state["show_welcome"] = False  # update here only on button click
@@ -36,12 +39,21 @@ if option == "BibTeX Cleaner":
                 bib_temp.close()
                 tex_temp.close()
                 cleaned_bib_path = 'cleaned_' + os.path.basename(bib_temp.name)
-                clean_bibtex(bib_temp.name, tex_temp.name, keep_unused, wrap_text)  # pass new parameter
+                clean_bibtex(bib_temp.name, tex_temp.name, keep_unused, wrap_text, remove_review_textcolor)  # pass new parameter
                 with open(cleaned_bib_path, 'r') as f:
                     cleaned_bib = f.read()
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
                 st.download_button("Download Cleaned BibTeX", cleaned_bib,
                                    file_name=cleaned_bib_path, mime="text/plain")
+                # If textcolor commands were removed, load and offer the cleaned .tex file
+                if remove_review_textcolor:
+                    cleaned_tex_path = 'cleaned_' + os.path.basename(tex_temp.name)
+                    with open(cleaned_tex_path, 'r') as f:
+                        cleaned_tex = f.read()
+                    st.text_area("Cleaned TeX", cleaned_tex, height=400)
+                    st.download_button("Download Cleaned TeX", cleaned_tex,
+                                       file_name=cleaned_tex_path, mime="text/plain")
+                    os.remove(cleaned_tex_path)
                 os.remove(bib_temp.name)
                 os.remove(tex_temp.name)
                 os.remove(cleaned_bib_path)
