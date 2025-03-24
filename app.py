@@ -28,7 +28,7 @@ if option == "BibTeX Cleaner":
     # Added checkbox for wrap_text with default True
     wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=False)
     # New checkbox for removing textcolor commands
-    remove_review_textcolor = st.sidebar.checkbox("Remove textcolor{red} commands", value=False)
+    remove_review_textcolor = st.sidebar.checkbox("Remove \\textcolor{red} commands", value=False)
 
     if st.sidebar.button("**Run BibTeX Cleaner**", type="primary", use_container_width=True):
         st.session_state["show_welcome"] = False  # update here only on button click
