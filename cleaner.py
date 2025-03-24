@@ -110,8 +110,8 @@ def main(bib_name, tex_name, keep_unused, wrap_text=False, remove_review_textcol
         f.write(cleaned_bib)
     
     if remove_review_textcolor:
-        final_bib = 'final_' + os.path.basename(bib_name)
-        final_tex = 'final_' + os.path.basename(tex_name)
+        final_bib = 'cleaned_' + os.path.basename(bib_name)
+        final_tex = 'cleaned_' + os.path.basename(tex_name)
         remove_textcolor(cleaned_file, final_bib)  # Update the cleaned bib file
         remove_textcolor(tex_name, final_tex)      # Update the tex file
 

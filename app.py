@@ -26,7 +26,7 @@ if option == "BibTeX Cleaner":
         tex_file = st.file_uploader("Upload your .tex file", type=["tex"])
     keep_unused = st.sidebar.checkbox("Keep unused entries", value=True)
     # Added checkbox for wrap_text with default True
-    wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=True)
+    wrap_text = st.sidebar.checkbox("Wrap the first word with \\text", value=False)
     # New checkbox for removing textcolor commands
     remove_review_textcolor = st.sidebar.checkbox("Remove textcolor commands", value=False)
 
@@ -36,6 +36,7 @@ if option == "BibTeX Cleaner":
             with tempfile.NamedTemporaryFile(delete=False) as bib_temp, tempfile.NamedTemporaryFile(delete=False) as tex_temp:
                 bib_temp.write(bib_file.read())
                 tex_temp.write(tex_file.read())
+                
                 bib_temp.close()
                 tex_temp.close()
 
@@ -51,10 +52,14 @@ if option == "BibTeX Cleaner":
                     cleaned_tex = f.read()
 
                 st.text_area("Cleaned BibTeX", cleaned_bib, height=400)
-                st.download_button("Download Cleaned BibTeX", cleaned_bib,
-                                   file_name=cleaned_bib_path, mime="text/plain")
-                st.download_button("Download Cleaned TeX", cleaned_tex,
-                                       file_name=cleaned_tex_path, mime="text/plain")
+                
+                cols_download = st.columns(2)
+                with cols_download[0]:
+                    st.download_button("Download Cleaned BibTeX", cleaned_bib,
+                                       file_name=cleaned_bib_path, mime="text/plain", use_container_width=True)
+                with cols_download[1]:
+                    st.download_button("Download Cleaned TeX", cleaned_tex,
+                                       file_name=cleaned_tex_path, mime="text/plain", use_container_width=True)
 
                 os.remove(bib_temp.name)
                 os.remove(tex_temp.name)
