@@ -53,12 +53,13 @@ streamlit run app.py
 ### Running the Cleaner
 
 ```bash
-python cleaner.py [bib_file] [tex_file] [--keep] [--wrap-text]
+python cleaner.py [bib_file] [tex_file] [--keep] [--wrap-text] [--remove-review-textcolor]
 ```
 - `bib_file` *(optional, default: ref.bib)*: Path to your `.bib` file.
 - `tex_file` *(optional, default: main.tex)*: Path to your `.tex` file.
 - `--keep`: Preserve unused entries in the cleaned bibliography.
 - `--wrap-text`: Wrap the first word in the title field with \text{} for proper LaTeX formatting.
+- `--remove-review-textcolor`: Remove textcolor markup from the output files.
 
 ### Running the Double-Checker
 
